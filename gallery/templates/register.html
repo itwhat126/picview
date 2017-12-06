@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% load img_extras %}
+
+{% block header %}
+{% include "header.html" with title="首页" %}
+{% endblock %}
+
+
+{% block content %}
+
+<script type="text/javascript">
+	$(function(){
+		$('#change').click(function(){
+			$.ajax({
+				url:'/verify_code/'
+				type:'POST'
+			}).success(function(data){
+		
+			})
+		})			
+	})
+</script>
+
+<div class="container">
+	<div class="row row-offcanvas row-offcanvas-right">
+		<div class="col-xs-12 col-sm-9">
+			
+<div class="blog-post">
+	<ul class="nav nav-tabs">
+		{% if request.session.islogin %}
+			<li role="presentation" class="active"><a href="/register/">新帐户注册</a></li>
+			<li role="presentation"><a href="/resetpwd/" class="active">重设密码</a></li>
+		{% else %}
+			<li role="presentation">
+				<a href="/login/">账号登录</a>
+			</li>
+			<li role="presentation" class="active"><a href="/register/">新帐户注册</a></li>
+			<li role="presentation"><a href="/resetpwd/">重设密码</a></li>
+		{% endif %}
+	</ul>
+	<br>
+</div>
+
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<form action="/register_handle/" method="post">
+			{% csrf_token %}
+			<div class="form-group">
+				<label>用户名（只能使用英文或者英文+数字，不可使用中文）：</label>
+				<div class="input-group">
+					<input class="form-control" id="id_username" name="username" maxlength="30" placeholder="至少6位字符的用户名，不可以是纯数字" required="required" type="text">
+					<span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+				</div>
+				<div id="id_username_hint" style="display:none;color: red;position:absolute;"></div>
+			</div>
+
+			<div class="form-group">
+				<label>输入密码：</label>
+				<div class="input-group">
+					<input class="form-control" id="id_password1" name="password1" placeholder="请设置登录密码" required="required" type="password">
+					<span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+				</div>		
+			</div>
+
+			<div class="form-group">
+				<label>再输入一遍密码：</label>
+				<div class="input-group">
+					<input class="form-control" id="id_password2" name="password2" value="" placeholder="再输入一遍，以确认密码输入正确无误" required="required" type="password">
+					<span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+				</div>	
+			</div>
+
+			<div class="form-group">
+				<label>手机号码：</label>
+				<div class="input-group">
+					<input class="form-control" id="id_phone" name="phone" placeholder="11位数字的手机号码" required="required" type="text">
+					<!-- <span class="input-group-btn"><button type="button" class="btn btn-default" id="id_btn_sms">发送短信验证码</button></span> -->
+					<span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+				</div>
+				<div id="id_phone_hint" style="color: red;position:absolute;">{{ errmsg_phone }}</div>
+			</div>
+
+			<div class="form-group">
+				<!-- 验证码 -->
+				<img src="/verify_code/" id="change" onclick="this.setAttribute('src','/verify_code/?verify_code='+Math.random())" style="border-radius: 4px">
+				<input class="verify_code" id="verify" type="text" name="vcode" required="required" placeholder="点击图片更换验证码" /><br/>
+			</div>
+
+			<!-- <div class="form-group">
+				<label>短信验证码：</label>
+				<div class="input-group">
+					<input class="form-control" id="id_vfy_code" maxlength="12" name="vfy_code" placeholder="手机接收到的短信验证码（4位数字）" required="required" type="text">
+					<input id="id_vfy_hash" name="vfy_hash" value="n/a" type="hidden">
+					<span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+				</div>	
+			</div>	 -->		
+
+			<div class="form-group">
+				<input name="submit" id="id_btn_submit" value="注 册" class="btn btn-primary form-control" type="submit">
+				<div id="id_last_hint" style="color: red;position:absolute;">{{errmsg}}</div>
+			</div>	
+		</form>
+	</div>
+</div>
+
+
+		</div>
+{% include "sidebar.html" %}
+	</div>
+</div> <!-- /container -->
+
+
+<script src="/static/js/register.js"></script>
+
+{% endblock %}

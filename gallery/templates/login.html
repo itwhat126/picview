@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load img_extras %}
+
+{% block header %}
+{% include "header.html" with title="首页" %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+	<div class="row row-offcanvas row-offcanvas-right">
+		<div class="col-xs-12 col-sm-9">
+<div class="blog-post">
+	<ul class="nav nav-tabs">
+		{% if request.session.islogin %}
+			<li role="presentation"><a href="/register/">新帐户注册</a></li>
+			<li role="presentation"><a href="/resetpwd/">重设密码</a></li>
+		{% else %}
+			<li role="presentation" class="active"><a href="/login/">账号登录</a>
+			<li role="presentation"><a href="/register/">新帐户注册</a></li>
+			<li role="presentation"><a href="/resetpwd/">重设密码</a></li>
+		{% endif %}
+	</ul>
+	<br>
+</div>
+
+<script src="/static/js/login.js"></script>
+
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<form action="" method="POST">
+			{% csrf_token %}
+			<div class="form-group">
+				<label class="control-label">账号:</label>
+				<input class="form-control" id="id_username" name="username" maxlength="30" placeholder="请输入用户名" type="text" value="{{ username }}">
+			</div>
+
+			<div class="form-group">
+				<label class="control-label">密码:</label>
+				<input class="form-control" id="id_password" name="password1" placeholder="请输入密码" type="password" autocomplete="new-password">
+			</div>
+
+			<div class="form-group">
+				<button id="id_btn_login" class="btn btn-primary btn-signin form-control" type="button">登陆</button>
+			</div>
+
+			<div>
+				<input type="checkbox" name="remember" {{ checked }} >
+				<label>记住用户名</label>
+			</div>
+			<div class="error_last" style="display: none; color: red"></div>
+		</form>
+	</div>
+</div>
+		</div>
+{% include "sidebar.html" %}
+	</div>
+</div> <!-- /container -->
+
+{% endblock %}

@@ -1,0 +1,84 @@
+/*底部*/
+#footer{
+	text-align: center;
+}
+
+/*面包屑导航*/
+.breadcrumb li+li:before {
+	padding: 0 5px;
+	color: #ccc;
+	content: "|\00a0"
+}
+
+.breadcrumb .active {
+	color: #777;
+	font-weight: bold;
+}
+
+.table-condition {
+	background-color: #f2f3f4;
+	font-size: x-small;
+}
+
+.table-condition th {
+	text-align: center;
+}
+
+.table-condition a {
+	margin: auto .3em;
+}
+.vimvixen-console-frame {
+	margin: 0;
+	padding: 0;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	z-index: 2147483647;
+	border: none;
+	background-color: unset;
+	pointer-events: none;
+}
+.vimvixen-hint {
+	background-color: yellow;
+	border: 1px solid gold;
+	font-weight: bold;
+	position: absolute;
+	text-transform: uppercase;
+	z-index: 2147483647;
+	font-size: 12px;
+	color: black;
+}
+
+p.text-warning.small:after{
+	display: table;
+	content: '';
+	clear: both;
+}
+span.label-default{
+	float: left;
+	display: inline-block;
+	margin: 0 2px 2px 0;
+	padding: .3em .5em .4em;
+}
+.thumbnail{
+	height: 280px;
+	overflow: hidden;
+}
+
+.col-xs-6.col-md-2 .thumbnail{
+	height: 116.219px;
+}
+
+.form-group .verify_code{
+	padding:6px 12px;
+	height: 32px;
+	font-size:14px;
+	line-height:1.42857143;
+	color:#555;
+	background-color:#fff;
+	background-image:none;
+	border:1px solid #ccc;
+	border-radius:4px;
+}

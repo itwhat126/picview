@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load img_extras %}
+
+{% block header %}
+{% include "header.html" with title="首页" %}
+{% endblock %}
+
+{% block content %}
+
+<script src="/static/js/index.js"></script>
+
+
+<div class="container">
+	<div class="row row-offcanvas row-offcanvas-right">
+		<div class="col-xs-12 col-sm-9">
+
+<table class="table table-hover table-condensed table-bordered table-condition hidden-xs" id="category">
+	<tbody>
+	{% for hc in high_cates %}
+		<tr>
+		<th>{{ hc }}</th>
+		<td>
+			{% for cate in hc.category_set.all %}
+			<a class="btn btn-default btn-xs" href="/?sev={{ cate.id }}">{{ cate.name }}</a>
+			{% endfor %}
+		</td>
+	</tr>
+	{% endfor %}
+</tbody></table>
+
+<div class="blog-post">
+	<div class="input-group">
+		<input class="form-control" id="id_search_input" onclick="this.select();" type="text" placeholder="请输入关键字,以空格分割" >
+		<span class="input-group-btn">
+			<button class="btn btn-primary" onclick="search_work()">搜索({{ cur_page.paginator.count }})</button>
+		</span>
+	</div>
+</div>
+
+
+
+<div class="row">
+	{% for gallery in cur_page %}
+	<div class="col-sm-3 col-xs-6">
+		<div class="thumbnail">
+			<a href="{{ gallery|gallery_url }}"><img src="{{ gallery | cover_img | img_thumb_url }}"></a>
+			<div class="caption">
+				<h5 class="text-overflow">{{ gallery.title }}</h5>
+				<p class="text-warning small">
+				{% for cate in gallery.category.all %}
+				<span class="label label-default">{{ cate.name }}</span>
+				{% endfor %}
+				</p>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+
+
+{% include "pager.html" %}
+
+
+			<!--<hr class="featurette-divider">-->
+		</div>
+{% include "sidebar.html" %}
+	</div>
+</div> <!-- /container -->
+
+
+{% endblock %}
