@@ -37,7 +37,7 @@ def index(request):
 		# 搜索关键词
 		gallery_qs = gallery_qs.search(keywords)
 
-	# 分页器（每页数量为8）
+	# 分页器（每页数量为12）
 	pager = Paginator(gallery_qs, 12)
 	data["cur_page"] = pager.page(page_num)
 
@@ -64,8 +64,18 @@ def gallery(request, gallery_id):
 		gallery = Gallery.objects.get(pk=gallery_id)
 	except Gallery.DoesNotExist:
 		raise Http404("Gallery does not exist")
+		
+	comments = Comment.objects.filter(gallery=gallery).order_by('-create_at')
+	
+	# 分页器（每页数量为12）
+	# pager = Paginator(comments, 3)
+	# data["cur_page"] = pager.page()
 
-	return render(request, 'gallery.html', {"gallery": gallery})
+	data = {
+		"gallery": gallery,
+		"comments": comments,
+	}
+	return render(request, 'gallery.html', data)
 
 
 def img_detail(request, img_id):
@@ -107,6 +117,7 @@ def login_check(request):
 
 			request.session['islogin'] = True
 			request.session['username'] = username
+			request.session['user_id'] = client.id
 
 			if remember == 'true':
 				# 记住用户名
@@ -168,6 +179,7 @@ def verify_code(request):
 	# 将内存中的图片数据返回给客户端，MIME类型为图片png
 	return HttpResponse(buf.getvalue(), 'image/png')
 
+
 @login_required
 def logout_view(request):
 	request.session.flush()
@@ -185,7 +197,8 @@ def register_handle(request):
 	username = request.POST.get('username')
 	password_1 = request.POST.get('password1')
 	password_2 = request.POST.get('password2')
-	phone = request.POST.get('phone')
+	# strip()去掉首尾空格
+	phone = request.POST.get('phone').strip()
 	vcode = request.POST.get('vcode')
 	vcode2 = request.session['verifycode']
 
@@ -267,12 +280,22 @@ def resetpwd_handle(request):
 		return JsonResponse({'flag':3})
 
 
-def comment(request):
+@login_required
+def comment(request, gallery_id):
+	"""创建评论
+	"""
+	user_id = request.session['user_id']
 	vcode = request.POST.get('vld_code')
 	vcode2 = request.session['verifycode']
-	print('vcode---%s'%vcode)
-	print('vcode2--%s'%vcode2)
+	content = request.POST.get('content')
 
-	# if not all([]}):
-	# 	return render(request, 'gallery.html', {'errmsg':'信息不能为空'})
-	pass
+	if request.method == "POST" and all([user_id,vcode,vcode2,content]):
+		if len(content) < 5:
+			# 限制内容长度，此处可从前端做判断。
+			return HttpResponse(
+				'评论内容太短。(3秒后自动跳转)<script type="text/javascript">'\
+				'setTimeout(function(){{history.go(-1)}},3000)'\
+				'</script>'.format(gallery_id))
+		one = Comment.objects.add_one(author=user_id, gallery_id=gallery_id, content=content)
+
+	return HttpResponseRedirect("/gallery_{}/#comment_head".format(gallery_id))

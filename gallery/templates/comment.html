@@ -1,0 +1,19 @@
+<hr class="featurette-divider" id="comment_head">
+<div id="id_desc_block" class="blog-post">
+	<h3>评论</h3>
+	{% for comment in comments %}
+	<div class="row">
+		<div class="col-xs-1 text-center" style="padding-top:5px;">
+			<img src="/static/img/defavatar.jpg" class="img-responsive img-circle">{{ comment.author.username }}
+		</div>
+		<div class="col-xs-11">
+			<div class="panel panel-default">
+				<div class="panel-heading small text-muted" style="padding:5px;">{{ comment.create_at | date:"Y-m-d H:i:s" }}</div>
+				<div class="panel-body">
+					<pre>{{ comment.content }}</pre>
+				</div>
+			</div>
+		</div><!-- COL-XS -->
+	</div>
+	{% endfor %}
+</div>

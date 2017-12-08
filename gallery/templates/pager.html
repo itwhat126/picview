@@ -1,20 +1,20 @@
 {% load url_extras %}
 {% if cur_page.has_other_pages %}
-<div class="btn-group btn-group-justified" style="margin: 24px auto;">
+	<div class="btn-group btn-group-justified" style="margin: 24px auto;">
 
 {% if cur_page.has_previous %}
-<a class="btn btn-primary" href="?{% current_url_with_parameter request 'page=' cur_page.previous_page_number %}">上一页</a>
+	<a class="btn btn-primary" href="?{% current_url_with_parameter request 'page=' cur_page.previous_page_number %}">上一页</a>
 {% else %}
-<a class="btn btn-primary disabled" href="#">上一页</a>
+	<a class="btn btn-primary disabled" href="#">上一页</a>
 {% endif %}
 
 <a class="btn btn-info">第{{ cur_page.number }}/{{ cur_page.paginator.num_pages }}页，共{{ cur_page.paginator.count }}篇</a>
 
 {% if cur_page.has_next %}
-<a class="btn btn-primary" href="?{% current_url_with_parameter request 'page=' cur_page.next_page_number %}">下一页</a>
+	<a class="btn btn-primary" href="?{% current_url_with_parameter request 'page=' cur_page.next_page_number %}">下一页</a>
 {% else %}
-<a class="btn btn-primary disabled" href="#">下一页</a>
+	<a class="btn btn-primary disabled" href="#">下一页</a>
 {% endif %}
 
-</div>
+	</div>
 {% endif %}

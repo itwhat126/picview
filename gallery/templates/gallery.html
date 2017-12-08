@@ -46,7 +46,7 @@
 <div class="blog-post row">
 	{% for img in gallery.uploadimg_set.all %}
 	<div class="col-xs-6 col-md-2 myClass">
-		<a href="{{ img|img_detail_url }}" class="thumbnail">
+		<a href="{{ img|img_detail_url }}" class="thumbnail" target="_blank">
 			<img src="{{ img|img_thumb_url }}" alt="{{ img.title }}" title="{{ img.title }}">
 		</a>
 	</div>
@@ -54,52 +54,71 @@
 </div>
 
 <div class="blog-post">
-	
+
 </div>
 
-
+{% include 'comment.html' %}
 
 <div class="blog-post">
 	<div class="panel panel-default">
 		<div class="panel-heading">添加评论</div>
 		<div class="panel-body">
-			<form action="/comment/" method="POST">
+			<form action="/comment/{{ gallery.id }}/" method="POST">
 				{% csrf_token %}
 				<div class="form-group">
 					<div class="input-group">
 						{% if request.session.islogin %}
+						<!-- 验证码部分 -->
 							<div class="input-group-btn" style="width: 100px; height: 30px; margin: 0px;">
 								<img src="/verify_code/" id="change" onclick="this.setAttribute('src','/verify_code/?verify_code='+Math.random())" style="border-radius: 4px;">
+							</div>
+							<div style="width: auto;margin-left:auto">
+								<input class="form-control" id="id_vld_code" name="vld_code" placeholder="输入图片验证码，点击图片更换" maxlength="12" required="required" type="text" style="border-radius: 4px">
+							</div>
+								<input id="id_vld_hash" name="vld_hash" value="" type="hidden">
+								<span class="input-group-addon" id="id_vld_code_hint"><span class="glyphicon glyphicon-asterisk"></span></span>
 							</div>
 						{% else %}
 							<span class="input-group-btn">
 								<a type="button" class="btn btn-primary" href="/login/">请先登录</a>
 							</span>
-						{% endif %}
-						<div style="width: auto;margin-left:auto">
-							<input class="form-control" id="id_vld_code" name="vld_code" placeholder="输入图片验证码，点击图片更换" maxlength="12" required="required" type="text" style="border-radius: 4px">
-						</div>
-						<input id="id_vld_hash" name="vld_hash" value="" type="hidden">
-						<span class="input-group-addon" id="id_vld_code_hint"><span class="glyphicon glyphicon-asterisk"></span></span>
+							<div style="width: auto;margin-left:auto">
+								<input class="form-control" id="id_vld_code" name="vld_code" placeholder="想对我说点啥就点击左侧登陆哦" maxlength="12" required="required" type="text" disabled="disabled">
+							</div>
+							<input id="id_vld_hash" name="vld_hash" value="" type="hidden">
+							<span class="input-group-addon" id="id_vld_code_hint"><span class="glyphicon glyphicon-asterisk"></span></span>
 					</div>
-						
+						{% endif %}
+	
 				</div>
-
-				<div class="form-group">
-					<input name="name" value="comment_post" type="hidden">
-					<textarea class="form-control" id="id_content" name="content" cols="40" rows="6"></textarea>		
-				</div>
-
-				<div class="form-group">
-					<input id="id_btn_comment_post" class="btn btn-primary" name="submit" value="发表评论" type="submit">
-				</div>
-				<span class="error_4" style="color: red;position:absolute;">{{errmsg}}</span>
+				{% if request.session.islogin %}
+				<!-- 评论框部分 -->
+					<div class="form-group">
+						<input name="name" value="comment_post" type="hidden">
+						<textarea class="form-control" id="id_content" name="content" cols="40" rows="6"></textarea>		
+					</div>
+					
+					<div class="form-group">
+						<input id="id_btn_comment_post" class="btn btn-primary" name="submit" value="发表评论" type="submit">
+					</div>
+					<span class="error_4" style="color: red;position:absolute;">{{errmsg}}</span>
+				{%  else%}
+					<div class="form-group">
+						<input name="name" value="comment_post" type="hidden">
+						<textarea class="form-control" id="id_content" name="content" cols="40" rows="6" disabled="disabled"></textarea>		
+					</div>
+					
+					<div class="form-group">
+						<input id="id_btn_comment_post" class="btn btn-primary" name="submit" value="发表评论" type="submit"  disabled="disabled">
+					</div>
+					<span class="error_4" style="color: red;position:absolute;">{{errmsg}}</span>
+				{% endif %}
 			</form>
 		</div>
 	</div>
 </div>
 
-		</div>
+		</div>		
 {% include "sidebar_detail.html" %}
 	</div>
 </div> <!-- /container -->

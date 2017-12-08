@@ -20,7 +20,7 @@ $(function(){
             }
             else if(data.flag==1)
             {
-                location.href = 'http://127.0.0.1:8000'
+                location.href = '/'
             }
             else if(data.flag==2)
             {

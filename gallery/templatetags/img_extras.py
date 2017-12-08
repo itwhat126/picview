@@ -26,7 +26,7 @@ def cover_img(gallery):
 def img_thumb_url(img):
     """获取图片的缩略图地址
     """
-    return "{}/thumb_{}_200.jpg".format(settings.BASE_URL, img.id)
+    return img.get_thumb_url()
 
 
 @register.filter

@@ -20,6 +20,6 @@ urlpatterns = [
 	url(r'^username_check/$', views.username_check),
 	url(r'^resetpwd/$', views.resetpwd),
 	url(r'^resetpwd_handle/$', views.resetpwd_handle),
-	url(r'^comment/$', views.comment),
+	url(r'^comment/(?P<gallery_id>\d+)/$', views.comment),
 ]
 

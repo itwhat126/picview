@@ -109,7 +109,12 @@ class UploadImg(models.Model):
 		"""获取图片url
 		"""
 		return "{}{}{}".format(settings.BASE_URL, settings.MEDIA_URL, self)
-
+	
+	def get_thumb_url(self, size=200):
+		"""获取图片缩略图url
+		"""
+		return "{}/thumb_{}_200.jpg".format(settings.BASE_URL, self.id)
+	
 	def get_local_pathname(self):
 		"""获取图片本地完整路径
 		"""
@@ -143,6 +148,13 @@ class Client(models.Model):
 		verbose_name = verbose_name_plural = '用户'
 
 
+class CommentManager(models.Manager):
+	"""Comment的模型管理器类"""
+	def add_one(self, author, gallery_id, content):
+		obj = self.create(author_id=author, gallery_id=gallery_id, content=content)
+		return obj
+
+
 class Comment(models.Model):
 	"""评论
 	"""
@@ -152,6 +164,8 @@ class Comment(models.Model):
 
 	create_at = models.DateTimeField('创建时间', auto_now_add=True)
 	modify_at = models.DateTimeField('修改时间', auto_now=True)
+
+	objects = CommentManager()
 
 	class Meta:
 		verbose_name = verbose_name_plural = "评论"
