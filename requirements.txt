@@ -1,5 +1,5 @@
 Django(1.11.7)
-bcrapy
+bcrypt
 mysql(5.7)
 Pillow
 requests
